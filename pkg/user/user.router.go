@@ -1,7 +1,3 @@
-// export a router for the user resource:
-
-// Path: users/user.router.go
-
 package user
 
 import (
