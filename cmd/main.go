@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/joho/godotenv"
-	user "example/paws-quest/pkg/user"
+	player "example/paws-quest/pkg/player"
 	dbService "example/paws-quest/pkg/database"
 	_ "github.com/lib/pq"
 )
@@ -33,7 +33,7 @@ func main () {
 		})
 	})
 
-	user.SetupUsersRouter(router.Group("/api/user"))
+	player.SetupPlayersRouter(router.Group("/api/player"))
 
 	router.Run("localhost:8080")
 }
