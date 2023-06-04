@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"fmt"
-	// "log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/joho/godotenv"
@@ -25,10 +24,9 @@ func main () {
 	_, err = database.Connect()
 	if err != nil {
 		panic(err)
-	} else {
-		fmt.Println("[Database] Connected to database")
-	}
-
+	} 
+	fmt.Println("[Database] Connected to database")
+	
 	router.GET("/ping", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
 			"message": "pong",
