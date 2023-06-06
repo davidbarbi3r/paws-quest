@@ -9,9 +9,12 @@ import (
 	player "example/paws-quest/pkg/player"
 	dbService "example/paws-quest/pkg/database"
 	_ "github.com/lib/pq"
+	gamemap "example/paws-quest/pkg/game/gamemap"
 )
 
 func main () {
+	gamemapService := gamemap.GameMapServiceImpl{}
+	fmt.Println(gamemapService.Create(4903))
 	err := godotenv.Load()
 	if err != nil {
 		panic(err)
