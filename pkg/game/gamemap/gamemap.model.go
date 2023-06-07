@@ -6,6 +6,7 @@ const (
 	Fight NodeType = "fight"
 	Shop NodeType = "shop"
 	Rest NodeType = "rest"
+	Boss NodeType = "boss"
 	// Mystery NodeType = "mystery"
 )
 
@@ -21,9 +22,6 @@ type GameMap struct {
 
 type GameMapService interface {
 	Create(seed int64) GameMap
-	AddNode(gamemap* GameMap, node Node) GameMap
-	ListNodes(gamemap GameMap) []Node
-	GetNode(gamemap GameMap, id int) Node
 }
 
 

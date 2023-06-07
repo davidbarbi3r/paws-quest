@@ -40,6 +40,13 @@ func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
 			if len(node.Connections) == 0 || (nodes[newConnection].ID > node.ID && node.Connections[0].ID != newConnection) {
 				node.Connections = append(node.Connections, nodes[newConnection])
 			} 
+			if i == nodeNumber - 1 {
+				node.Connections = append(node.Connections, Node{
+					ID: nodeNumber,
+					Type: Boss,
+					Connections: nil,
+				})
+			}
 		}
 		nodes[i] = node
 	}
@@ -47,18 +54,6 @@ func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
 	return GameMap{
 		Nodes: nodes,
 	}
-}
-
-func ListNodes(gamemap GameMap) []Node {
-	return []Node{}
-}
-
-func GetNode(gamemap GameMap, id int) Node {
-	return Node{}
-}
-
-func AddNode(gamemap* GameMap, node Node) GameMap {
-	return GameMap{}
 }
 
 
