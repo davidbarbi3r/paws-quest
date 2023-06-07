@@ -48,5 +48,11 @@ func TestCreateGameMap(t *testing.T) {
 		}
 	}
 
+	// two game maps with the same seed should be the same
+	gameMap2 := gms.Create(seed)
+	if gameMap.Nodes[0].ID != gameMap2.Nodes[0].ID {
+		t.Errorf("Two game maps with the same seed are not the same")
+	}
+
 	fmt.Println("TestCreateGameMap ✅.")
 }
