@@ -6,15 +6,20 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/joho/godotenv"
-	player "example/paws-quest/pkg/player"
+
+	// db
 	dbService "example/paws-quest/pkg/database"
 	_ "github.com/lib/pq"
+
+	// internal packages
+	player "example/paws-quest/pkg/player"
 	gamemap "example/paws-quest/pkg/game/gamemap"
+	game "example/paws-quest/pkg/game"
 )
 
 func main () {
 	gamemapService := gamemap.GameMapServiceImpl{}
-	fmt.Println(gamemapService.Create(4903))
+	fmt.Println(gamemapService.Create(496603))
 	err := godotenv.Load()
 	if err != nil {
 		panic(err)
@@ -37,6 +42,7 @@ func main () {
 	})
 
 	player.SetupPlayersRouter(router.Group("/api/player"))
+	game.SetupGameRouter(router.Group("/api/game"))
 
 	router.Run("localhost:8080")
 }
