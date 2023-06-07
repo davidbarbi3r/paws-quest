@@ -34,8 +34,12 @@ func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
 		node := nodes[i]
 		connections := NewRand.Intn(2) + 1
 		for j := 0; j < connections; j++ {
-			connection := nodes[NewRand.Intn(nodeNumber)]
-			node.Connections = append(node.Connections, connection)
+			maxDistance := 2
+			newConnection := i + 1 + NewRand.Intn(maxDistance)
+
+			if len(node.Connections) == 0 || (nodes[newConnection].ID > node.ID && node.Connections[0].ID != newConnection) {
+				node.Connections = append(node.Connections, nodes[newConnection])
+			} 
 		}
 		nodes[i] = node
 	}
