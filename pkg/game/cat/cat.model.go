@@ -4,14 +4,14 @@ import (
 	"example/paws-quest/pkg/game/card"
 )
 
-type Element string
+type Element int
 
 const (
-	Normal Element = "normal"
-	Fire Element = "fire"
-	Water Element = "water"
-	Earth Element = "earth"
-	Air Element = "air"
+	Normal Element = iota
+	Fire  
+	Water  
+	Earth  
+	Air 
 )
 
 type Cat struct {
@@ -32,3 +32,4 @@ type Cat struct {
 	Hand []card.Card `json:"hand"`
 	// Items []Item `json:"objects"`
 }
+

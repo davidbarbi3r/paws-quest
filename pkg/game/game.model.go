@@ -25,10 +25,12 @@ type GameService interface {
 
 type Game struct {
 	ID int
-	Player player.Player
+	Player int
 	CurrentNode gamemap.Node
 	Map gamemap.GameMap
 	State GameState
+	CatChosen *int
+	CatChoice []int
 }
 
 

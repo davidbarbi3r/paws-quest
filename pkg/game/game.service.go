@@ -3,8 +3,7 @@ package game
 import (
 	// internal packages
 	"example/paws-quest/pkg/game/gamemap"
-	"example/paws-quest/pkg/player"
-	
+
 	// external packages (standard library)
 	"net/http"
 
@@ -35,18 +34,15 @@ func (gs *GameServiceImpl) Create (ctx *gin.Context) {
 	// Create a new Game (next with the GameService)
 	game := Game{
 		ID:          423, 
-		Player:      player.Player{
-			ID: playerId,
-			Name: "Test Player",
-			Email: "",
-			Password: "password",
-			Level: 1,
-			Experience: 0,
-		},
+		Player:      playerId,
 		CurrentNode: newMap.Nodes[0], 
 		Map:         newMap, 
 		State:       CatSelection,
+		CatChosen:   nil, 
+		CatChoice:   []int{1, 2, 3},
 	}
+
+	// Save the game to the database using the GameService
 
 	ctx.JSON(http.StatusOK, game)
 }
