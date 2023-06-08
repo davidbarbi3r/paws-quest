@@ -15,26 +15,49 @@ type Card struct {
 	Name string 
 	Description string 
 	Type CardType 
+	Cost int
+	Rarity int
 	Actions []ActionFunc
 }
 
 type ActionFunc func(ActionContext) error
 
 type ActionContext struct {
-	Target string 
-	Effect string 
+	Target Target 
+	Field Field 
 	Amount int 
 	Duration int
+	Card *Card
 }
 
-var exampleAttackCard = Card {
-	ID: 1,
-	Name: "Paw Swipe",
-	Description: "A basic attack card",
-	Type: Attack,
-	Actions: []ActionFunc{
-		func (ctx ActionContext) error {
-			return nil
-		},
-	},
+type Field int
+
+const (
+	Health Field = iota
+	Stamina
+	Speed
+	Strength
+	Agility
+	Intelligence
+	HandSize
+)
+
+type Target interface {}
+
+type Rarity int
+
+const (
+	Common Rarity = iota
+	Uncommon
+	Rare
+)
+
+func (c *Card) Play(ctx ActionContext) error {
+	for _, action := range c.Actions {
+		err := action(ctx)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
