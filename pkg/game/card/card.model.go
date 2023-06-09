@@ -5,9 +5,7 @@ type CardType string
 const (
 	Attack CardType = "attack"
 	Defense CardType = "defense"
-	Heal CardType = "heal"
-	Curse CardType = "curse"
-	Buff CardType = "buff"
+	Effect CardType = "effect"
 )
 
 type Card struct {
@@ -17,18 +15,26 @@ type Card struct {
 	Type CardType 
 	Cost int
 	Rarity int
-	Actions []ActionFunc
+	Actions []ActionContext
 }
 
-type ActionFunc func(ActionContext) error
 
 type ActionContext struct {
 	Target Target 
 	Field Field 
+	Type ActionType
 	Amount int 
 	Duration int
-	Card *Card
 }
+
+type ActionType string
+
+const (
+	Damage ActionType = "damage"
+	Heal ActionType = "heal"
+	Curse ActionType = "curse"
+	Buff ActionType = "buff"
+)
 
 type Field int
 
@@ -52,11 +58,17 @@ const (
 	Rare
 )
 
-func (c *Card) Play(ctx ActionContext) error {
-	for _, action := range c.Actions {
-		err := action(ctx)
-		if err != nil {
-			return err
+func (c *Card) Play (actions []ActionContext) error {
+	for _, action := range actions {
+		switch action.Type {
+		case Damage:
+			// remove action.Amount from action.Target's action.Field
+		case Heal:
+			// add action.Amount to action.Target's action.Field
+		case Curse:
+			// add a curse to action.Target that deals action.Amount damage for action.Duration turns
+		case Buff:
+			// add a buff to action.Target that adds action.Amount to action.Field for action.Duration turns
 		}
 	}
 	return nil
