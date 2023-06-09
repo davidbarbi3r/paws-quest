@@ -2,35 +2,35 @@ package enemy
 
 import (
 	"example/paws-quest/pkg/game/card"
-	"example/paws-quest/pkg/game/cat"
+	"example/paws-quest/pkg/game/character"
 )
 
 type Enemy struct {
-	ID int `json:"id"`
-	Name string `json:"name"`
+	ID int 
+	Name string 
 
-	Health int `json:"health"`
-	// Stamina int `json:"stamina"`
-	Speed int `json:"speed"`
-	Strength int `json:"strength"`
-	Agility int `json:"agility"`
-	Intelligence int `json:"intelligence"`
-	Type cat.Element `json:"type"`
+	Health int 
+	Stamina int 
+	Speed int 
+	Strength int 
+	Agility int 
+	Intelligence int 
+	Type character.Element 
 
-	Actions []Action `json:"actions"`
-	ActionsPattern []int `json:"actionsPattern"`
-	Loot Loot `json:"loot"`
+	Actions []Action 
+	ActionsPattern []int 
+	Loot Loot 
 }
 
 type Loot struct {
-	Experience int `json:"experience"`
+	Experience int 
 	// Items []Item `json:"items"`
-	Cards []card.Card `json:"card"`
+	Cards []card.Card 
 }
 
 type Action struct {
-	Target string `json:"target"`
-	Effect string `json:"effect"`
-	Amount int `json:"amount"`
-	Duration int `json:"duration"`
+	Target string 
+	Effect string 
+	Amount int 
+	Duration int 
 }

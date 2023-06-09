@@ -36,16 +36,6 @@ var exampleAttackCard = card.Card {
 	Type: card.Attack,
 	Cost: 1,
 	Rarity: int(card.Common),
-	Actions: []card.ActionFunc{
-		func (ctx card.ActionContext) error {
-			ctx.Target.(*enemy.Enemy).Health -= ctx.Amount
-			return nil 
-		},
-		func(ctx card.ActionContext) error {
-			ctx.Target.(*cat.Cat).Stamina -= ctx.Card.Cost
-			return nil
-		},
-	},
 }
 
 var exampleAttackCard2 = card.Card {
@@ -55,15 +45,6 @@ var exampleAttackCard2 = card.Card {
 	Type: card.Attack,
 	Cost: 2,
 	Rarity: int(card.Common),
-	Actions: []card.ActionFunc{
-		func (ctx card.ActionContext) error {
-			// remove ctx.Amount from ctx.Target's health
-			// remove ctx.Cost from ctx.Self's stamina
-			// draw a card from ctx.Self's deck
-			
-			return nil 
-		},
-	},
 }
 
 var exampleAttackCardBetterDmg = card.Card {
@@ -73,14 +54,6 @@ var exampleAttackCardBetterDmg = card.Card {
 	Type: card.Attack,
 	Cost: 3,
 	Rarity: int(card.Uncommon),
-	Actions: []card.ActionFunc{
-		func (ctx card.ActionContext) error {
-			// remove ctx.Amount from ctx.Target's health
-			// remove ctx.Cost from ctx.Self's stamina
-			
-			return nil 
-		},
-	},
 }
 
 var exampleDuplicateCard = card.Card {
@@ -90,15 +63,6 @@ var exampleDuplicateCard = card.Card {
 	Type: card.Attack,
 	Cost: 1,
 	Rarity: int(card.Common),
-	Actions: []card.ActionFunc{
-		func (ctx card.ActionContext) error {
-			// remove ctx.Amount from ctx.Target's health
-			// remove ctx.Cost from ctx.Self's stamina
-			// add a copy of this card to ctx.Self's hand
-			
-			return nil 
-		},
-	},
 }
 
 var exampleAttackDotCard = card.Card {

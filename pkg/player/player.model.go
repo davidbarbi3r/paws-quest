@@ -1,12 +1,12 @@
 package player
 
 type Player struct {
-	ID int `json:"id"`
-	Name string `json:"name"`
-	Email string `json:"email"`
-	Password string `json:"password"`
-	Level int `json:"level"`
-	Experience int `json:"experience"`
+	ID int 
+	Name string 
+	Email string 
+	Password string 
+	Level int 
+	Experience int 
 }
 
 // type PlayerService interface {
