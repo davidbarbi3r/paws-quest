@@ -15,8 +15,6 @@ import (
 	player "example/paws-quest/pkg/player"
 	gamemap "example/paws-quest/pkg/game/gamemap"
 	game "example/paws-quest/pkg/game"
-	cat "example/paws-quest/pkg/game/cat"
-	enemy "example/paws-quest/pkg/game/enemy"
 	card "example/paws-quest/pkg/game/card"
 )
 
@@ -72,19 +70,6 @@ var exampleAttackDotCard = card.Card {
 	Type: card.Attack,
 	Cost: 2,
 	Rarity: int(card.Common),
-	Actions: []card.ActionFunc{
-		func (ctx card.ActionContext) error {
-			// remove ctx.Amount from ctx.Target's health
-			// remove ctx.Cost from ctx.Self's stamina
-			
-			return nil 
-		},
-		func(ctx card.ActionContext) error {
-			// add a curse to ctx.Target that deals ctx.Amount damage for ctx.Duration turns
-			
-			return nil 
-		},
-	},
 }
 	
 	connectionString := os.Getenv("POSTGRES_URL")

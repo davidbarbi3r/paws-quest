@@ -13,6 +13,24 @@ const (
 	Air 
 )
 
+type Field int
+
+const (
+	Health Field = iota
+	Stamina
+	Speed
+	Strength
+	Agility
+	Intelligence
+	HandSize
+)
+
+type Effect struct {
+	Field Field
+	Duration int
+	Amount int
+}
+
 type Character struct {
 	ID int 
 	Name string 
@@ -28,8 +46,10 @@ type Character struct {
 	Deck []card.Card
     Hand []card.Card 
 
-	// Curses []Curse `json:"curses"`
-	// Buffs []Buff `json:"buffs"`
-	// Items []Item `json:"objects"`
+	Curses []Effect 
+	// Buffs []Buff 
+	// Items []Item
+
+	IsDead bool
 }
 

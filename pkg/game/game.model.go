@@ -3,7 +3,13 @@ package game
 import (
 	"example/paws-quest/pkg/player"
 	"example/paws-quest/pkg/game/gamemap"
+	"example/paws-quest/pkg/game/character"
 )
+
+type GameContext struct {
+	Source      *character.Character
+	Destination *character.Character
+}
 
 type GameState string
 
@@ -31,6 +37,7 @@ type Game struct {
 	State GameState
 	CatChosen *int
 	CatChoice []int
+	GameContext *GameContext
 }
 
 
