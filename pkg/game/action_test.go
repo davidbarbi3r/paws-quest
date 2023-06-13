@@ -1,7 +1,6 @@
-package action
+package game
 
 import (
-	"example/paws-quest/pkg/game/character"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -10,10 +9,10 @@ import (
 func TestActions(t *testing.T) {
 	// Prend x pts de vie de la cible et récupère ces points de vie dans la source
 	c := &GameContext{
-		Source: &character.Character{
+		Source: &Character{
 			Health: 10,
 		},
-		Destination: &character.Character{
+		Destination: &Character{
 			Health: 10,
 		},
 	}
@@ -24,10 +23,10 @@ func TestActions(t *testing.T) {
 
 	// Enlève x pts de vie à la cible et ajoute une Curse à la cible
 	c = &GameContext{
-		Source: &character.Character{
+		Source: &Character{
 			Health: 10,
 		},
-		Destination: &character.Character{
+		Destination: &Character{
 			Health: 10,
 		},
 	}
@@ -35,5 +34,5 @@ func TestActions(t *testing.T) {
 	b.Do(c)
 	require.Equal(t, c.Source.Health, 10)
 	require.Equal(t, c.Destination.Health, 5)
-	require.Equal(t, c.Destination.Curses[0].Field, character.Health)
+	require.Equal(t, c.Destination.Curses[0].Field, Health)
 }

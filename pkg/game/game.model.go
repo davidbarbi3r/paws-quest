@@ -1,7 +1,6 @@
 package game
 
 import (
-	"example/paws-quest/pkg/game/action"
 	"example/paws-quest/pkg/game/gamemap"
 	"example/paws-quest/pkg/player"
 )
@@ -11,6 +10,8 @@ type GameState string
 const (
 	CatSelection GameState = "cat-selection"
 	Fight GameState = "fight"
+	EnemyTurn GameState = "enemy-turn"
+	PlayerTurn GameState = "player-turn"
 	Shop GameState = "shop"
 	Rest GameState = "rest"
 	Boss GameState = "boss"
@@ -32,7 +33,7 @@ type Game struct {
 	State GameState
 	CatChosen *int
 	CatChoice []int
-	GameContext *action.GameContext
+	GameContext *GameContext
 }
 
 

@@ -1,12 +1,14 @@
-package action
+package game
 
-import (
-	"example/paws-quest/pkg/game/character"
-)
+type Effect struct {
+	Field Field
+	Duration int
+	Amount int
+}
 
 type GameContext struct {
-	Source      *character.Character
-	Destination *character.Character
+	Source      *Character
+	Destination *Character
 }
 
 type IAction interface {
@@ -30,8 +32,8 @@ type Poison struct {
 
 func (a *Poison) Do(ac *GameContext) {
 	ac.Destination.Health -= a.Dmg
-	ac.Destination.Curses = append(ac.Destination.Curses, character.Effect{
-		Field:    character.Health,
+	ac.Destination.Curses = append(ac.Destination.Curses, Effect{
+		Field:    Health,
 		Duration: a.Duration,
 		Amount:   a.Dot,
 	})
