@@ -15,9 +15,6 @@ import (
 
 	// internal packages
 	game "example/paws-quest/pkg/game"
-	action "example/paws-quest/pkg/game/action"
-	card "example/paws-quest/pkg/game/card"
-	character "example/paws-quest/pkg/game/character"
 	gamemap "example/paws-quest/pkg/game/gamemap"
 	player "example/paws-quest/pkg/player"
 )
@@ -31,23 +28,22 @@ func main () {
 	}
 
 
-var exampleAttackCard = card.Card {
+var exampleAttackCard = game.Card {
 	ID: 1,
 	Name: "Paw Swipe",
 	Description: "An awesome pow attack",
-	Type: card.Attack,
 	Cost: 1,
-	Rarity: int(card.Common),
-	Action: action.Attack{
+	Rarity: int(game.Common),
+	Action: game.Attack{
 		Dmg: 1,
 	},
 }
 
-exampleAttackCard.Action.Do(&action.GameContext{
-	Source: &character.Character{
+exampleAttackCard.Action.Do(&game.GameContext{
+	Source: &game.Character{
 		Health: 10,
 	},
-	Destination: &character.Character{
+	Destination: &game.Character{
 		Health: 10,
 	},
 })

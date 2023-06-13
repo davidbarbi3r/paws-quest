@@ -1,4 +1,4 @@
-package character
+package game
 
 type Element int
 
@@ -10,23 +10,17 @@ const (
 	Air 
 )
 
-type Field int
+type Field string
 
 const (
-	Health Field = iota
-	Stamina
-	Speed
-	Strength
-	Agility
-	Intelligence
-	HandSize
+	Health Field = "health"
+	Stamina Field = "stamina"
+	Speed Field = "speed"
+	Strength Field = "strength"
+	Agility Field = "agility"
+	Intelligence Field = "intelligence"
+	HandSize Field = "handSize"
 )
-
-type Effect struct {
-	Field Field
-	Duration int
-	Amount int
-}
 
 type Character struct {
 	ID int 
@@ -39,9 +33,11 @@ type Character struct {
 	Agility int 
 	Intelligence int 
 	Type Element
+	HandSize int
 
-	// Deck []card.Card
-    // Hand []card.Card 
+	Deck []Card
+    Hand []Card 
+	Discard []Card
 
 	Curses []Effect 
 	// Buffs []Buff 
