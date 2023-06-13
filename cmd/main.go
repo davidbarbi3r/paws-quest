@@ -1,21 +1,25 @@
 package main
 
 import (
-	"os"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
 	// db
 	dbService "example/paws-quest/pkg/database"
+
 	_ "github.com/lib/pq"
 
 	// internal packages
-	player "example/paws-quest/pkg/player"
-	gamemap "example/paws-quest/pkg/game/gamemap"
 	game "example/paws-quest/pkg/game"
+	action "example/paws-quest/pkg/game/action"
 	card "example/paws-quest/pkg/game/card"
+	character "example/paws-quest/pkg/game/character"
+	gamemap "example/paws-quest/pkg/game/gamemap"
+	player "example/paws-quest/pkg/player"
 )
 
 func main () {
@@ -34,43 +38,55 @@ var exampleAttackCard = card.Card {
 	Type: card.Attack,
 	Cost: 1,
 	Rarity: int(card.Common),
+	Action: action.Attack{
+		Dmg: 1,
+	},
 }
 
-var exampleAttackCard2 = card.Card {
-	ID: 2,
-	Name: "Cat Scratch",
-	Description: "A basic attack card",
-	Type: card.Attack,
-	Cost: 2,
-	Rarity: int(card.Common),
-}
+exampleAttackCard.Action.Do(&action.GameContext{
+	Source: &character.Character{
+		Health: 10,
+	},
+	Destination: &character.Character{
+		Health: 10,
+	},
+})
 
-var exampleAttackCardBetterDmg = card.Card {
-	ID: 3,
-	Name: "Cat bomb",
-	Description: "A basic++ attack card",
-	Type: card.Attack,
-	Cost: 3,
-	Rarity: int(card.Uncommon),
-}
+// var exampleAttackCard2 = card.Card {
+// 	ID: 2,
+// 	Name: "Cat Scratch"
+// 	Description: "A basic attack card",
+// 	Type: card.Attack,
+// 	Cost: 2,
+// 	Rarity: int(card.Common),
+// }
 
-var exampleDuplicateCard = card.Card {
-	ID: 4,
-	Name: "Duplicate",
-	Description: "A basic card",
-	Type: card.Attack,
-	Cost: 1,
-	Rarity: int(card.Common),
-}
+// var exampleAttackCardBetterDmg = card.Card {
+// 	ID: 3,
+// 	Name: "Cat bomb",
+// 	Description: "A basic++ attack card",
+// 	Type: card.Attack,
+// 	Cost: 3,
+// 	Rarity: int(card.Uncommon),
+// }
 
-var exampleAttackDotCard = card.Card {
-	ID: 5,
-	Name: "Cat Poisoned Scratch",
-	Description: "A basic attack card",
-	Type: card.Attack,
-	Cost: 2,
-	Rarity: int(card.Common),
-}
+// var exampleDuplicateCard = card.Card {
+// 	ID: 4,
+// 	Name: "Duplicate",
+// 	Description: "A basic card",
+// 	Type: card.Attack,
+// 	Cost: 1,
+// 	Rarity: int(card.Common),
+// }
+
+// var exampleAttackDotCard = card.Card {
+// 	ID: 5,
+// 	Name: "Cat Poisoned Scratch",
+// 	Description: "A basic attack card",
+// 	Type: card.Attack,
+// 	Cost: 2,
+// 	Rarity: int(card.Common),
+// }
 	
 	connectionString := os.Getenv("POSTGRES_URL")
 	

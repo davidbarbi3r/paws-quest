@@ -1,5 +1,7 @@
 package card
 
+import "example/paws-quest/pkg/game/action"
+
 type CardType string
 
 const (
@@ -15,6 +17,8 @@ type Card struct {
 	Type CardType 
 	Cost int
 	Rarity int
+
+	Action action.IAction
 }
 
 type Rarity int

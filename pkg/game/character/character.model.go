@@ -1,8 +1,5 @@
 package character
 
-import (
-	"example/paws-quest/pkg/game/card"
-)
 type Element int
 
 const (
@@ -43,8 +40,8 @@ type Character struct {
 	Intelligence int 
 	Type Element
 
-	Deck []card.Card
-    Hand []card.Card 
+	// Deck []card.Card
+    // Hand []card.Card 
 
 	Curses []Effect 
 	// Buffs []Buff 

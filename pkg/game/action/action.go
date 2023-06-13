@@ -2,34 +2,33 @@ package action
 
 import (
 	"example/paws-quest/pkg/game/character"
-	"example/paws-quest/pkg/game/card"
-	"example/paws-quest/pkg/game"
 )
 
-type player struct {
-	Hp   int
-	Mana int
-	Curse []character.Effect
-	Deck []card.Card
-	Hand []card.Card
+type GameContext struct {
+	Source      *character.Character
+	Destination *character.Character
 }
 
-type leechLife struct {
+type IAction interface {
+	Do(*GameContext)
+}
+
+type LeechLife struct {
 	Hp int
 }
 
-func (a *leechLife) Do(ac *game.GameContext) {
+func (a LeechLife) Do(ac *GameContext) {
 	ac.Source.Health += a.Hp
 	ac.Destination.Health -= a.Hp
 }
 
-type poison struct {
+type Poison struct {
 	Dmg int
 	Dot int
 	Duration int
 }
 
-func (a *poison) Do(ac *game.GameContext) {
+func (a *Poison) Do(ac *GameContext) {
 	ac.Destination.Health -= a.Dmg
 	ac.Destination.Curses = append(ac.Destination.Curses, character.Effect{
 		Field:    character.Health,
@@ -38,46 +37,46 @@ func (a *poison) Do(ac *game.GameContext) {
 	})
 }
 
-type heal struct {
+type Heal struct {
 	Hp int
 }
 
-func (a *heal) Do(ac *game.GameContext) {
+func (a *Heal) Do(ac *GameContext) {
 	ac.Destination.Health += a.Hp
 }
 
-type attack struct {
+type Attack struct {
 	Dmg int
 }
 
-func (a *attack) Do(ac *game.GameContext) {
+func (a Attack) Do(ac *GameContext) {
 	ac.Destination.Health -= a.Dmg
 }
 
-type draw struct {
-	Card int
-}
+// type Draw struct {
+// 	Card int
+// }
 
-func (a *draw) Do(ac *game.GameContext) {
-	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Card])
-}
+// func (a *Draw) Do(ac *GameContext) {
+// 	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Card])
+// }
 
-type discard struct {
-	Card int
-}
+// type Discard struct {
+// 	Card int
+// }
 
-func (a *discard) Do(ac *game.GameContext) {
-	ac.Destination.Hand = append(ac.Destination.Hand[:a.Card], ac.Destination.Hand[a.Card+1:]...)
-}
+// func (a *Discard) Do(ac *GameContext) {
+// 	ac.Destination.Hand = append(ac.Destination.Hand[:a.Card], ac.Destination.Hand[a.Card+1:]...)
+// }
 
-type attackDraw struct {
-	Dmg int
-	Card int
-}
+// type AttackDraw struct {
+// 	Dmg int
+// 	Card int
+// }
 
-func (a *attackDraw) Do(ac *game.GameContext) {
-	ac.Destination.Health -= a.Dmg
-	for i := 0; i < a.Card; i++ {
-		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
-	}
-}
+// func (a *AttackDraw) Do(ac *GameContext) {
+// 	ac.Destination.Health -= a.Dmg
+// 	for i := 0; i < a.Card; i++ {
+// 		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
+// 	}
+// }

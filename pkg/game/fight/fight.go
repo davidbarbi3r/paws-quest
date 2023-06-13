@@ -4,14 +4,13 @@ import (
 	"example/paws-quest/pkg/game/action"
 	"example/paws-quest/pkg/game/card"
 	"example/paws-quest/pkg/game/character"
-	"example/paws-quest/pkg/game"
 )
 
 func hasEnoughStamina (c *character.Character, cost int) bool {
 	return c.Stamina >= cost
 }
 
-func setCharacterDead (game *game.GameContext) {
+func setCharacterDead (game *action.GameContext) {
 	if game.Destination.Health <= 0 {
 		game.Destination.Health = 0
 		game.Destination.IsDead = true
@@ -22,7 +21,7 @@ func setCharacterDead (game *game.GameContext) {
 	}
 }
 
-func applyCurses (game *game.GameContext) {
+func applyCurses (game *action.GameContext) {
 	for i := 0; i < len(game.Destination.Curses); i++ {
 		// game.Destination[game.Destination.Field] -= game.Destination.Curses[i].Amount
 		game.Destination.Curses[i].Duration--
@@ -32,3 +31,11 @@ func applyCurses (game *game.GameContext) {
 		}
 	}
 }
+
+func playCard (game *action.GameContext, card *card.Card) {
+	if !hasEnoughStamina(game.Source, card.Cost) {
+		return
+	}
+	game.Source.Stamina -= card.Cost
+	
+} 
