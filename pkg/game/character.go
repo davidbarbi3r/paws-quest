@@ -39,4 +39,3 @@ type Character struct {
 
 	IsDead bool
 }
-

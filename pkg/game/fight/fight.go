@@ -49,7 +49,6 @@ func PlayCard (gc *game.GameContext, card *game.Card) {
 }
 
 func EndPlayerTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *game.Game) {
-	
 	// reset stamina // todo setup initial properties when needed
 	gc.Source.Parameters[game.Stamina] = gc.Source.Parameters[game.Speed]
 	
@@ -75,7 +74,7 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *gam
 		gc.Source.Discard = []game.Card{}
 		
 		// shuffle deck
-		gc.Source.Deck = game.ShuffleCards(gc.Source.Deck)
+		gc.Source.Deck = game.Shuffle(gc.Source.Deck)
 		
 		// remove drawn cards from deck
 		gc.Source.Deck = []game.Card{}

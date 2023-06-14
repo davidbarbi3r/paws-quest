@@ -23,10 +23,10 @@ const (
 	Rare
 )
 
-func ShuffleCards(cards []Card) []Card {
+func Shuffle[T int | Card | string](items []T) []T {
 	// implement shuffle
 	randSeed := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(randSeed)
-	r.Shuffle(len(cards), func(i, j int) { cards[i], cards[j] = cards[j], cards[i] })
-	return cards
+	r.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+	return items
 }
