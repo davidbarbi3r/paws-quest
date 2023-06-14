@@ -10,11 +10,11 @@ import (
 
 	// db
 	dbService "example/paws-quest/pkg/database"
+	"example/paws-quest/pkg/game"
 
 	_ "github.com/lib/pq"
 
 	// internal packages
-	game "example/paws-quest/pkg/game"
 	gamemap "example/paws-quest/pkg/game/gamemap"
 	player "example/paws-quest/pkg/player"
 )
@@ -41,13 +41,18 @@ var exampleAttackCard = game.Card {
 
 exampleAttackCard.Action.Do(&game.GameContext{
 	Source: &game.Character{
-		Health: 10,
+		Parameters: map[game.Field]int{
+			game.Health: 10,
+			game.Stamina: 10,
+		},
 	},
 	Destination: &game.Character{
-		Health: 10,
+		Parameters: map[game.Field]int{
+			game.Health: 10,
+			game.Stamina: 10,
+		},
 	},
 })
-
 // var exampleAttackCard2 = card.Card {
 // 	ID: 2,
 // 	Name: "Cat Scratch"

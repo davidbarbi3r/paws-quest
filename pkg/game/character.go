@@ -10,31 +10,25 @@ const (
 	Air 
 )
 
-type Field string
+type Field int
 
 const (
-	Health Field = "health"
-	Stamina Field = "stamina"
-	Speed Field = "speed"
-	Strength Field = "strength"
-	Agility Field = "agility"
-	Intelligence Field = "intelligence"
-	HandSize Field = "handSize"
+	Health Field = iota
+	Stamina 
+	Speed 
+	Strength 
+	Agility 
+	Intelligence 
+	HandSize
 )
 
 type Character struct {
 	ID int 
 	Name string 
-
-	Health int
-	Stamina int
-	Speed int 
-	Strength int 
-	Agility int 
-	Intelligence int 
 	Type Element
-	HandSize int
-
+	
+	Parameters map[Field]int
+	
 	Deck []Card
     Hand []Card 
 	Discard []Card
