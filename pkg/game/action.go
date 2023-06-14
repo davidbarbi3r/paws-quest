@@ -20,8 +20,8 @@ type LeechLife struct {
 }
 
 func (a LeechLife) Do(ac *GameContext) {
-	ac.Source.Health += a.Hp
-	ac.Destination.Health -= a.Hp
+	ac.Source.Parameters[Health] += a.Hp
+	ac.Destination.Parameters[Health] -= a.Hp
 }
 
 type Poison struct {
@@ -31,7 +31,7 @@ type Poison struct {
 }
 
 func (a *Poison) Do(ac *GameContext) {
-	ac.Destination.Health -= a.Dmg
+	ac.Destination.Parameters[Health] -= a.Dmg
 	ac.Destination.Curses = append(ac.Destination.Curses, Effect{
 		Field:    Health,
 		Duration: a.Duration,
@@ -44,7 +44,7 @@ type Heal struct {
 }
 
 func (a *Heal) Do(ac *GameContext) {
-	ac.Destination.Health += a.Hp
+	ac.Destination.Parameters[Health] += a.Hp
 }
 
 type Attack struct {
@@ -52,7 +52,7 @@ type Attack struct {
 }
 
 func (a Attack) Do(ac *GameContext) {
-	ac.Destination.Health -= a.Dmg
+	ac.Destination.Parameters[Health] -= a.Dmg
 }
 
 // type Draw struct {
@@ -77,7 +77,7 @@ func (a Attack) Do(ac *GameContext) {
 // }
 
 // func (a *AttackDraw) Do(ac *GameContext) {
-// 	ac.Destination.Health -= a.Dmg
+// 	ac.Destination.Parameters[Health] -= a.Dmg
 // 	for i := 0; i < a.Card; i++ {
 // 		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
 // 	}
