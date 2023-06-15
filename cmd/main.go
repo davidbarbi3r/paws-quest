@@ -33,7 +33,7 @@ var exampleAttackCard = game.Card {
 	Name: "Paw Swipe",
 	Description: "An awesome pow attack",
 	Cost: 1,
-	Rarity: int(game.Common),
+	Rarity: game.Common,
 	Action: game.Attack{
 		Dmg: 1,
 	},

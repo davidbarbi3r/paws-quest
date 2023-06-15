@@ -10,7 +10,7 @@ type Card struct {
 	Name string 
 	Description string 
 	Cost int
-	Rarity int
+	Rarity Rarity
 
 	Action IAction
 }
