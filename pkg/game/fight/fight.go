@@ -25,7 +25,7 @@ func applyCurses (c *game.Character) {
 	}
 }
 
-func PlayCard (gc *game.GameContext, card *game.Card) {
+func PlayCard (gc *game.GameContext, card game.Card) {
 	if !hasEnoughStamina(gc.Source, card.Cost) {
 		return
 	}
@@ -48,7 +48,7 @@ func PlayCard (gc *game.GameContext, card *game.Card) {
 	} 
 }
 
-func EndPlayerTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *game.Game) {
+func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
 	// reset stamina // todo setup initial properties when needed
 	gc.Source.Parameters[game.Stamina] = gc.Source.Parameters[game.Speed]
 	
@@ -85,8 +85,6 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *gam
 
 	// set g state to enemy turn
 	g.State = game.EnemyTurn
-
-	return gc, g
 }
 
 func EndEnemyTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *game.Game) {

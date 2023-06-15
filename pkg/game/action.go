@@ -55,30 +55,30 @@ func (a Attack) Do(ac *GameContext) {
 	ac.Destination.Parameters[Health] -= a.Dmg
 }
 
-// type Draw struct {
-// 	Card int
-// }
+type Draw struct {
+	Card int
+}
 
-// func (a *Draw) Do(ac *GameContext) {
-// 	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Card])
-// }
+func (a *Draw) Do(ac *GameContext) {
+	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Card])
+}
 
-// type Discard struct {
-// 	Card int
-// }
+type Discard struct {
+	Card int
+}
 
-// func (a *Discard) Do(ac *GameContext) {
-// 	ac.Destination.Hand = append(ac.Destination.Hand[:a.Card], ac.Destination.Hand[a.Card+1:]...)
-// }
+func (a *Discard) Do(ac *GameContext) {
+	ac.Destination.Hand = append(ac.Destination.Hand[:a.Card], ac.Destination.Hand[a.Card+1:]...)
+}
 
-// type AttackDraw struct {
-// 	Dmg int
-// 	Card int
-// }
+type AttackDraw struct {
+	Dmg int
+	Card int
+}
 
-// func (a *AttackDraw) Do(ac *GameContext) {
-// 	ac.Destination.Parameters[Health] -= a.Dmg
-// 	for i := 0; i < a.Card; i++ {
-// 		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
-// 	}
-// }
+func (a *AttackDraw) Do(ac *GameContext) {
+	ac.Destination.Parameters[Health] -= a.Dmg
+	for i := 0; i < a.Card; i++ {
+		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
+	}
+}
