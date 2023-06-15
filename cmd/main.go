@@ -19,6 +19,17 @@ import (
 	player "example/paws-quest/pkg/player"
 )
 
+// todo
+// - add the deck creation logic at the start of the game after the player has chosen their character
+// - add the object model 
+// - add the shop logic and implement croquinette economy
+// - add the rest node logic 
+// - implement the logic between two fights when an enemy is dead
+// - implement the logic when the player play a card or when an enemy do an action for missing attacks, critical hit...
+// (will certainly need a specific patern to do so) && how the tests are going to work with random output ??
+// - implement the possibility to have multiple enemies in a same node
+// - add the enemy map population
+
 func main () {
 	gamemapService := gamemap.GameMapServiceImpl{}
 	fmt.Println(gamemapService.Create(496603))
