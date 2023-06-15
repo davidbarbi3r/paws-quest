@@ -3,6 +3,7 @@ package fight
 import (
 	"example/paws-quest/pkg/game"
 	"testing"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -68,22 +69,25 @@ func TestPlayCard_ApplyCardAction(t *testing.T) {
 func TestPlayCard_RemoveCardFromHand(t *testing.T) {
 	gc := &game.GameContext{
 		Source: &game.Character{
-			Parameters: map[game.Field]int{},
+			Parameters: map[game.Field]int{
+				game.Health: 10,
+				game.Stamina: 10,
+			},
 			Hand:       []game.Card{
 				{ID: 1, Action: game.Attack{Dmg: 5}},
 				{ID: 2, Action: game.Attack{Dmg: 5}, Cost: 5},
 			},
 		},
 		Destination: &game.Character{
-			Parameters: map[game.Field]int{},
+			Parameters: map[game.Field]int{
+				game.Health: 10,
+			},
 		},
 	}
-	gc.Source.Parameters[game.Stamina] = 10
-	gc.Destination.Parameters[game.Health] = 10
 
 	PlayCard(gc, gc.Source.Hand[1])
 
-	// require.Len(t, gc.Source.Hand, 1)
+	require.Len(t, gc.Source.Hand, 1)
 	require.Equal(t, 5, gc.Source.Parameters[game.Stamina])
 	require.Equal(t, 1, gc.Source.Hand[0].ID)
 }
