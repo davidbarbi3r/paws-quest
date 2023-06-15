@@ -31,6 +31,7 @@ type Character struct {
 	
 	Deck []Card
     Hand []Card 
+	CardsPatern []int
 	Discard []Card
 
 	Curses []Effect 

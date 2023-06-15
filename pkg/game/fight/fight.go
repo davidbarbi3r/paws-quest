@@ -8,39 +8,55 @@ func hasEnoughStamina (c *game.Character, cost int) bool {
 	return c.Parameters[game.Stamina] >= cost
 }
 
-func isCharacterDead (gc *game.GameContext) bool {
-	return gc.Destination.Parameters[game.Health] <= 0 || gc.Source.Parameters[game.Health] <= 0
+func isCharacterDead (c *game.Character) bool {
+	return c.Parameters[game.Health] <= 0
 }
 
 func applyCurses (c *game.Character) {
 	for i := 0; i < len(c.Curses); i++ {
 
-		c.Parameters[c.Curses[i].Field] -= c.Curses[i].Amount
+		if c.Curses[i].Duration > 0 {
+			c.Parameters[c.Curses[i].Field] -= c.Curses[i].Amount
+			c.Curses[i].Duration--
+		}
+	}
+}
 
-		c.Curses[i].Duration--
-		if c.Curses[i].Duration <= 0 {
-			// remove curse i from curses
+func removeExpiredCurses (c *game.Character) {
+	for i := 0; i < len(c.Curses); i++ {
+		if c.Curses[i].Duration == 0 {
 			c.Curses = append(c.Curses[:i], c.Curses[i+1:]...)
 		}
 	}
 }
 
-func PlayCard (gc *game.GameContext, card game.Card) {
+func StartPlayerTurn (gc *game.GameContext, g *game.Game) {
+	applyCurses(gc.Source)
+	removeExpiredCurses(gc.Source)
+
+	if isCharacterDead(gc.Source) {
+		g.State = game.GameOver
+		return
+	}
+
+	g.State = game.PlayerTurn
+}
+
+func PlayCard (gc *game.GameContext, g *game.Game, card game.Card) {
 	if !hasEnoughStamina(gc.Source, card.Cost) {
 		return
 	}
-	// remove stamina
+
 	gc.Source.Parameters[game.Stamina] -= card.Cost
 	
-	// apply card action
 	card.Action.Do(gc)
 
-	// check if character is dead
-	if isCharacterDead(gc) {
+	if isCharacterDead(gc.Source) {
+		g.State = game.GameOver
 		return
 	}
 
-	// remove this card from hand
+	// remove card from hand
 	for i := 0; i < len(gc.Source.Hand); i++ {
 		if gc.Source.Hand[i].ID == card.ID {
 			gc.Source.Hand = append(gc.Source.Hand[:i], gc.Source.Hand[i+1:]...)
@@ -70,10 +86,8 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
 		// put discard pile in deck
 		gc.Source.Deck = append(gc.Source.Deck, gc.Source.Discard...)
 		
-		// empty discard pile
 		gc.Source.Discard = []game.Card{}
 		
-		// shuffle deck
 		gc.Source.Deck = game.Shuffle(gc.Source.Deck)
 		
 		// remove drawn cards from deck
@@ -83,15 +97,33 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
 	// remove drawn cards from deck
 	gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[game.HandSize]:]
 
-	// set g state to enemy turn
+	// switch source and destination
+	gc.Source, gc.Destination = gc.Destination, gc.Source
 	g.State = game.EnemyTurn
 }
 
-func EndEnemyTurn (gc *game.GameContext, g *game.Game) (*game.GameContext, *game.Game) {
-	// apply Destination curses
-	applyCurses(gc.Destination)
+func EnemyTurn (gc *game.GameContext, g *game.Game) {
+	applyCurses(gc.Source)
+	removeExpiredCurses(gc.Source)
 
-	return gc, g
+	if isCharacterDead(gc.Source) {
+		g.State = game.Loot
+		return
+	}
+
+	card := gc.Source.Hand[gc.Destination.CardsPatern[0]]
+	card.Action.Do(gc)
+
+	if isCharacterDead(gc.Destination) {
+		g.State = game.GameOver
+		return
+	}
+
+	// put card played at the end of the pattern
+	gc.Destination.CardsPatern = append(gc.Destination.CardsPatern[1:], gc.Destination.CardsPatern[0])
+
+	gc.Source, gc.Destination = gc.Destination, gc.Source
+	g.State = game.PlayerTurn
 }
 
 

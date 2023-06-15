@@ -12,6 +12,7 @@ const (
 	Fight GameState = "fight"
 	EnemyTurn GameState = "enemy-turn"
 	PlayerTurn GameState = "player-turn"
+	Loot GameState = "loot"
 	Shop GameState = "shop"
 	Rest GameState = "rest"
 	Boss GameState = "boss"
