@@ -12,7 +12,7 @@ type Card struct {
 	Cost int
 	Rarity Rarity
 
-	Action IAction
+	Actions []IAction
 }
 
 type Rarity int

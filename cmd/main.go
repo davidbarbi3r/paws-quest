@@ -24,6 +24,7 @@ import (
 // - add the object model 
 // - add the shop logic and implement croquinette economy
 // - add the rest node logic 
+// - add the logic to have combined actions (ex: attack + poison) 
 // - implement the logic between two fights when an enemy is dead
 // - implement the logic when the player play a card or when an enemy do an action for missing attacks, critical hit...
 // (will certainly need a specific patern to do so) && how the tests are going to work with random output ??
@@ -37,68 +38,6 @@ func main () {
 	if err != nil {
 		panic(err)
 	}
-
-
-var exampleAttackCard = game.Card {
-	ID: 1,
-	Name: "Paw Swipe",
-	Description: "An awesome pow attack",
-	Cost: 1,
-	Rarity: game.Common,
-	Action: game.Attack{
-		Dmg: 1,
-	},
-}
-
-exampleAttackCard.Action.Do(&game.GameContext{
-	Source: &game.Character{
-		Parameters: map[game.Field]int{
-			game.Health: 10,
-			game.Stamina: 10,
-		},
-	},
-	Destination: &game.Character{
-		Parameters: map[game.Field]int{
-			game.Health: 10,
-			game.Stamina: 10,
-		},
-	},
-})
-// var exampleAttackCard2 = card.Card {
-// 	ID: 2,
-// 	Name: "Cat Scratch"
-// 	Description: "A basic attack card",
-// 	Type: card.Attack,
-// 	Cost: 2,
-// 	Rarity: int(card.Common),
-// }
-
-// var exampleAttackCardBetterDmg = card.Card {
-// 	ID: 3,
-// 	Name: "Cat bomb",
-// 	Description: "A basic++ attack card",
-// 	Type: card.Attack,
-// 	Cost: 3,
-// 	Rarity: int(card.Uncommon),
-// }
-
-// var exampleDuplicateCard = card.Card {
-// 	ID: 4,
-// 	Name: "Duplicate",
-// 	Description: "A basic card",
-// 	Type: card.Attack,
-// 	Cost: 1,
-// 	Rarity: int(card.Common),
-// }
-
-// var exampleAttackDotCard = card.Card {
-// 	ID: 5,
-// 	Name: "Cat Poisoned Scratch",
-// 	Description: "A basic attack card",
-// 	Type: card.Attack,
-// 	Cost: 2,
-// 	Rarity: int(card.Common),
-// }
 	
 	connectionString := os.Getenv("POSTGRES_URL")
 	

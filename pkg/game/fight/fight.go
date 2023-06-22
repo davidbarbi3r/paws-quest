@@ -49,14 +49,15 @@ func PlayCard (gc *game.GameContext, g *game.Game, card game.Card) {
 
 	gc.Source.Parameters[game.Stamina] -= card.Cost
 	
-	card.Action.Do(gc)
+	for _, action := range card.Actions {
+		action.Do(gc)
+	}
 
 	if isCharacterDead(gc.Source) {
 		g.State = game.GameOver
 		return
 	}
 
-	// remove card from hand
 	for i := 0; i < len(gc.Source.Hand); i++ {
 		if gc.Source.Hand[i].ID == card.ID {
 			gc.Source.Hand = append(gc.Source.Hand[:i], gc.Source.Hand[i+1:]...)
@@ -112,7 +113,10 @@ func EnemyTurn (gc *game.GameContext, g *game.Game) {
 	}
 
 	card := gc.Source.Hand[gc.Destination.CardsPatern[0]]
-	card.Action.Do(gc)
+	
+	for _, action := range card.Actions {
+		action.Do(gc)
+	}
 
 	if isCharacterDead(gc.Destination) {
 		g.State = game.GameOver

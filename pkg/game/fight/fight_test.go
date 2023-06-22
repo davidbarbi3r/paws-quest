@@ -110,7 +110,9 @@ func TestPlayCard_ApplyCardAction(t *testing.T) {
 
 	card := game.Card{
 		Cost:   5,
-		Action: game.Attack{Dmg: 5},
+		Actions: []game.IAction {
+			game.Attack{Dmg: 5},
+		},
 	}
 
 	PlayCard(gc, g, card)
@@ -130,8 +132,8 @@ func TestPlayCard_RemoveCardFromHand(t *testing.T) {
 				game.Stamina: 10,
 			},
 			Hand: []game.Card{
-				{ID: 1, Action: game.Attack{Dmg: 5}},
-				{ID: 2, Action: game.Attack{Dmg: 5}, Cost: 5},
+				{ID: 1, Actions: []game.IAction {game.Attack{Dmg: 5}}},
+				{ID: 2, Actions: []game.IAction {game.Attack{Dmg: 5}}, Cost: 5},
 			},
 		},
 		Destination: &game.Character{
