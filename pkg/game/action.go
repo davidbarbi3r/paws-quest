@@ -15,52 +15,62 @@ type IAction interface {
 	Do(*GameContext)
 }
 
-type LeechLife struct {
-	Hp int
-}
-
-func (a LeechLife) Do(ac *GameContext) {
-	ac.Source.Parameters[Health] += a.Hp
-	ac.Destination.Parameters[Health] -= a.Hp
-}
-
 type Poison struct {
-	Dmg int
-	Dot int
 	Duration int
+	Amount int
 }
 
 func (a Poison) Do(ac *GameContext) {
-	ac.Destination.Parameters[Health] -= a.Dmg
 	ac.Destination.Curses = append(ac.Destination.Curses, Effect{
 		Field:    Health,
 		Duration: a.Duration,
-		Amount:   a.Dot,
+		Amount:   a.Amount,
 	})
 }
 
 type Heal struct {
-	Hp int
+	Duration int
+	Amount int
 }
 
 func (a Heal) Do(ac *GameContext) {
-	ac.Destination.Parameters[Health] += a.Hp
+	if a.Duration > 1 {
+		ac.Source.Parameters[Health] += a.Amount
+		ac.Source.Curses = append(ac.Source.Curses, Effect{
+			Field:    Health,
+			Duration: a.Duration - 1,
+			Amount:   a.Amount,
+		})
+	} else {
+		ac.Source.Parameters[Health] += a.Amount
+	}
 }
 
 type Attack struct {
-	Dmg int
+	Duration int
+	Amount int
 }
 
 func (a Attack) Do(ac *GameContext) {
-	ac.Destination.Parameters[Health] -= a.Dmg
+	if a.Duration > 1 {
+		ac.Destination.Parameters[Health] -= a.Amount
+		ac.Destination.Curses = append(ac.Destination.Curses, Effect{
+			Field:    Health,
+			Duration: a.Duration - 1,
+			Amount:   a.Amount,
+		})
+	} else {
+		ac.Destination.Parameters[Health] -= a.Amount
+	}
 }
 
 type Draw struct {
-	Card int
+	Amount int
 }
 
 func (a Draw) Do(ac *GameContext) {
-	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Card])
+	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Amount])
+	ac.Source.Deck = append(ac.Source.Deck[:a.Amount], ac.Source.Deck[a.Amount+1:]...)
 }
 
 type Discard struct {

@@ -35,7 +35,7 @@ type Character struct {
 	Discard []Card
 
 	Curses []Effect 
-	// Buffs []Buff 
+	Buffs []Effect 
 	// Items []Item
 
 	IsDead bool

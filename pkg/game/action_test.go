@@ -20,9 +20,8 @@ func TestActions(t *testing.T) {
 			},
 		},
 	}
-	a := LeechLife{5}
+	a := Attack{1, 5}
 	a.Do(c)
-	require.Equal(t, c.Source.Parameters[Health], 15)
 	require.Equal(t, c.Destination.Parameters[Health], 5)
 
 	// Enlève x pts de vie à la cible et ajoute une Curse à la cible
@@ -38,9 +37,9 @@ func TestActions(t *testing.T) {
 			},
 		},
 	}
-	b := &Poison{5, 1, 3}
+	b := &Poison{3, 1}
 	b.Do(c)
 	require.Equal(t, c.Source.Parameters[Health], 10)
-	require.Equal(t, c.Destination.Parameters[Health], 5)
+	require.Equal(t, c.Destination.Parameters[Health], 10)
 	require.Equal(t, c.Destination.Curses[0].Field, Health)
 }

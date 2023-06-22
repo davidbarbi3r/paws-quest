@@ -30,3 +30,18 @@ func Shuffle[T int | Card | string](items []T) []T {
 	r.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
 	return items
 }
+
+func CreateDeck (size uint8) []Card {
+	// goal 60% common, 30% uncommon, 10% rare
+	if size < 20 {
+		size = 20
+	} else if size > 30 {
+		size = 30
+	}
+
+	deck := make([]Card, size)
+
+	// todo grab cards from database
+
+	return Shuffle(deck)
+}
