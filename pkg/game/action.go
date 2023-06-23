@@ -1,5 +1,10 @@
 package game
 
+import (
+	"math/rand"
+	"time"
+)
+
 type Effect struct {
 	Field Field
 	Duration int
@@ -34,16 +39,21 @@ type Heal struct {
 }
 
 func (a Heal) Do(ac *GameContext) {
-	if a.Duration > 1 {
-		ac.Source.Parameters[Health] += a.Amount
-		ac.Source.Curses = append(ac.Source.Curses, Effect{
-			Field:    Health,
-			Duration: a.Duration - 1,
-			Amount:   a.Amount,
-		})
-	} else {
-		ac.Source.Parameters[Health] += a.Amount
+	if randCritical(ac.Source) {
+		a.Amount *= ac.Source.Parameters[CriticalDamage]/100
 	}
+
+	if a.Duration <= 1 {
+		ac.Source.Parameters[Health] += a.Amount
+		return
+	}
+	
+	ac.Source.Parameters[Health] += a.Amount
+	ac.Source.Buffs = append(ac.Source.Buffs, Effect{
+		Field:    Health,
+		Duration: a.Duration - 1,
+		Amount:   a.Amount,
+	})
 }
 
 type Attack struct {
@@ -51,17 +61,26 @@ type Attack struct {
 	Amount int
 }
 
-func (a Attack) Do(ac *GameContext) {
-	if a.Duration > 1 {
-		ac.Destination.Parameters[Health] -= a.Amount
-		ac.Destination.Curses = append(ac.Destination.Curses, Effect{
-			Field:    Health,
-			Duration: a.Duration - 1,
-			Amount:   a.Amount,
-		})
-	} else {
-		ac.Destination.Parameters[Health] -= a.Amount
+func (a Attack) Do(ac *GameContext) {	
+	if randDodge(ac.Destination) {
+		return
 	}
+
+	if randCritical(ac.Source) {
+		a.Amount *= ac.Source.Parameters[CriticalDamage]/100
+	}
+
+	if a.Duration <= 1 {
+		ac.Destination.Parameters[Health] -= a.Amount
+		return
+	}
+
+	ac.Destination.Parameters[Health] -= a.Amount
+	ac.Destination.Curses = append(ac.Destination.Curses, Effect{
+		Field:    Health,
+		Duration: a.Duration - 1,
+		Amount:   a.Amount,
+	})
 }
 
 type Draw struct {
@@ -69,26 +88,26 @@ type Draw struct {
 }
 
 func (a Draw) Do(ac *GameContext) {
-	ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[a.Amount])
-	ac.Source.Deck = append(ac.Source.Deck[:a.Amount], ac.Source.Deck[a.Amount+1:]...)
+	ac.Source.Hand = append(ac.Source.Hand, ac.Source.Deck[:a.Amount]...)
+	// delete drawn cards from deck
+	ac.Source.Deck = ac.Source.Deck[a.Amount:]
 }
 
 type Discard struct {
-	Card int
+	Amount int
 }
 
 func (a Discard) Do(ac *GameContext) {
-	ac.Destination.Hand = append(ac.Destination.Hand[:a.Card], ac.Destination.Hand[a.Card+1:]...)
+	ac.Destination.Hand = ac.Destination.Hand[a.Amount:]
 }
 
-type AttackDraw struct {
-	Dmg int
-	Card int
+func randCritical(c *Character) bool {
+	rand := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return rand.Intn(100) <= c.Parameters[Critical]
+} 
+
+func randDodge(c *Character) bool {
+	rand := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return rand.Intn(100) <= c.Parameters[Dodge]
 }
 
-func (a AttackDraw) Do(ac *GameContext) {
-	ac.Destination.Parameters[Health] -= a.Dmg
-	for i := 0; i < a.Card; i++ {
-		ac.Destination.Hand = append(ac.Destination.Hand, ac.Destination.Deck[i])
-	}
-}

@@ -7,7 +7,7 @@ import (
 )
 
 func TestActions(t *testing.T) {
-	// Prend x pts de vie de la cible et récupère ces points de vie dans la source
+	// Deal x dmg to the target
 	c := &GameContext{
 		Source: &Character{
 			Parameters: map[Field]int{
@@ -24,7 +24,7 @@ func TestActions(t *testing.T) {
 	a.Do(c)
 	require.Equal(t, c.Destination.Parameters[Health], 5)
 
-	// Enlève x pts de vie à la cible et ajoute une Curse à la cible
+	// Deal x dmg to the target and apply poison
 	c = &GameContext{
 		Source: &Character{
 			Parameters: map[Field]int{

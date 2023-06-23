@@ -13,13 +13,13 @@ const (
 type Field int
 
 const (
-	Health Field = iota
-	Stamina 
-	Speed 
-	Strength 
-	Agility 
-	Intelligence 
-	HandSize
+	Health Field = iota // from 10 to 100
+	Stamina // from 0 to 10
+	Speed // from 0 to 10
+	Critical // from 0 to 100
+	CriticalDamage // from 0 to 100
+	Dodge // from 0 to 100
+	HandSize // from 0 to 10
 )
 
 type Character struct {
