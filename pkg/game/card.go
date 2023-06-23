@@ -31,17 +31,34 @@ func Shuffle[T int | Card | string](items []T) []T {
 	return items
 }
 
-func CreateDeck (size uint8) []Card {
+func CreateStarterDeck () []Card {
 	// goal 60% common, 30% uncommon, 10% rare
-	if size < 20 {
-		size = 20
-	} else if size > 30 {
-		size = 30
+
+	deck := []Card{
+		// 13 common cards
+		commonCards[0],
+		commonCards[0],
+		commonCards[0],
+		commonCards[1],
+		commonCards[1],
+		commonCards[2],
+		commonCards[2],
+		commonCards[2],
+		commonCards[3],
+		commonCards[3],
+		commonCards[4],
+		commonCards[6],
+		commonCards[7],
+		// 5 uncommon cards
+		uncommonCards[2],
+		uncommonCards[3],
+		uncommonCards[4],
+		uncommonCards[0],
+		uncommonCards[0],
+		// 2 rare cards
+		rareCards[0],
+		rareCards[1],
 	}
-
-	deck := make([]Card, size)
-
-	// todo grab cards from database
 
 	return Shuffle(deck)
 }
