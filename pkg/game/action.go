@@ -67,7 +67,7 @@ func (a Attack) Do(ac *GameContext) {
 	}
 
 	if randCritical(ac.Source) {
-		a.Amount *= ac.Source.Parameters[CriticalDamage]/100
+		a.Amount += a.Amount * ac.Source.Parameters[CriticalDamage]/100
 	}
 
 	if a.Duration <= 1 {
