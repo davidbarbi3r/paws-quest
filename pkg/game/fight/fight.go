@@ -22,17 +22,52 @@ func applyCurses (c *game.Character) {
 	}
 }
 
-func removeExpiredCurses (c *game.Character) {
+func applyBuffs (c *game.Character) {
+	for i := 0; i < len(c.Buffs); i++ {
+
+		if c.Buffs[i].Duration > 0 {
+			if c.Buffs[i].Field == game.Health {
+				c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
+				c.Buffs[i].Duration--
+				return 
+			} 
+				
+			c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
+		}
+	}
+}
+
+func applyDebuffs (c *game.Character) {
+	for i := 0; i < len(c.Buffs); i++ {
+		
+		if c.Buffs[i].Duration > 0 {
+			if c.Buffs[i].Field == game.Health {
+				return 
+			} 
+				
+			c.Parameters[c.Buffs[i].Field] -= c.Buffs[i].Amount
+			c.Buffs[i].Duration--
+		}
+	}
+}
+
+func removeExpiredCursesAndBuffs (c *game.Character) {
 	for i := 0; i < len(c.Curses); i++ {
 		if c.Curses[i].Duration == 0 {
 			c.Curses = append(c.Curses[:i], c.Curses[i+1:]...)
+		}
+	}
+	for i := 0; i < len(c.Buffs); i++ {
+		if c.Buffs[i].Duration == 0 {
+			c.Buffs = append(c.Buffs[:i], c.Buffs[i+1:]...)
 		}
 	}
 }
 
 func StartPlayerTurn (gc *game.GameContext, g *game.Game) {
 	applyCurses(gc.Source)
-	removeExpiredCurses(gc.Source)
+	applyBuffs(gc.Source)
+	removeExpiredCursesAndBuffs(gc.Source)
 
 	if isCharacterDead(gc.Source) {
 		g.State = game.GameOver
@@ -105,7 +140,7 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
 
 func EnemyTurn (gc *game.GameContext, g *game.Game) {
 	applyCurses(gc.Source)
-	removeExpiredCurses(gc.Source)
+	removeExpiredCursesAndBuffs(gc.Source)
 
 	if isCharacterDead(gc.Source) {
 		g.State = game.Loot
