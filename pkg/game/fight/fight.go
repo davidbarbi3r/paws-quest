@@ -13,6 +13,9 @@ func isCharacterDead (c *game.Character) bool {
 }
 
 func applyCurses (c *game.Character) {
+	if len(c.Curses) == 0 {
+		return
+	}
 	for i := 0; i < len(c.Curses); i++ {
 
 		if c.Curses[i].Duration > 0 {
@@ -23,26 +26,30 @@ func applyCurses (c *game.Character) {
 }
 
 func applyBuffs (c *game.Character) {
+	if len(c.Buffs) == 0 {
+		return
+	}
 	for i := 0; i < len(c.Buffs); i++ {
-
 		if c.Buffs[i].Duration > 0 {
 			if c.Buffs[i].Field == game.Health {
 				c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
 				c.Buffs[i].Duration--
-				return 
-			} 
-				
-			c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
+			} else {
+				c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
+			}		
 		}
 	}
 }
 
 func applyDebuffs (c *game.Character) {
+	if len(c.Buffs) == 0 {
+		return
+	}
 	for i := 0; i < len(c.Buffs); i++ {
 		
 		if c.Buffs[i].Duration > 0 {
 			if c.Buffs[i].Field == game.Health {
-				return 
+				continue 
 			} 
 				
 			c.Parameters[c.Buffs[i].Field] -= c.Buffs[i].Amount
@@ -52,14 +59,18 @@ func applyDebuffs (c *game.Character) {
 }
 
 func removeExpiredCursesAndBuffs (c *game.Character) {
-	for i := 0; i < len(c.Curses); i++ {
-		if c.Curses[i].Duration == 0 {
-			c.Curses = append(c.Curses[:i], c.Curses[i+1:]...)
+	if len(c.Curses) != 0 {
+		for i := 0; i < len(c.Curses); i++ {
+			if c.Curses[i].Duration == 0 {
+				c.Curses = append(c.Curses[:i], c.Curses[i+1:]...)
+			}
 		}
 	}
-	for i := 0; i < len(c.Buffs); i++ {
-		if c.Buffs[i].Duration == 0 {
-			c.Buffs = append(c.Buffs[:i], c.Buffs[i+1:]...)
+	if len(c.Buffs) != 0 {
+		for i := 0; i < len(c.Buffs); i++ {
+			if c.Buffs[i].Duration == 0 {
+				c.Buffs = append(c.Buffs[:i], c.Buffs[i+1:]...)
+			}
 		}
 	}
 }
@@ -133,6 +144,8 @@ func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
 	// remove drawn cards from deck
 	gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[game.HandSize]:]
 
+	applyDebuffs(gc.Destination)
+
 	// switch source and destination
 	gc.Source, gc.Destination = gc.Destination, gc.Source
 	g.State = game.EnemyTurn
@@ -147,10 +160,14 @@ func EnemyTurn (gc *game.GameContext, g *game.Game) {
 		return
 	}
 
-	card := gc.Source.Hand[gc.Destination.CardsPatern[0]]
+	if len(gc.Source.CardsPatern) != 0 {
+		card := gc.Source.Hand[gc.Source.CardsPatern[0]]
 	
-	for _, action := range card.Actions {
-		action.Do(gc)
+		for _, action := range card.Actions {
+			action.Do(gc)
+		}
+		// put card played at the end of the pattern
+		gc.Destination.CardsPatern = append(gc.Destination.CardsPatern[1:], gc.Destination.CardsPatern[0])
 	}
 
 	if isCharacterDead(gc.Destination) {
@@ -158,8 +175,7 @@ func EnemyTurn (gc *game.GameContext, g *game.Game) {
 		return
 	}
 
-	// put card played at the end of the pattern
-	gc.Destination.CardsPatern = append(gc.Destination.CardsPatern[1:], gc.Destination.CardsPatern[0])
+	applyDebuffs(gc.Destination)
 
 	gc.Source, gc.Destination = gc.Destination, gc.Source
 	g.State = game.PlayerTurn

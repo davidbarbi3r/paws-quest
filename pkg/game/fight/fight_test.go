@@ -172,3 +172,51 @@ func TestEndPlayerTurn(t *testing.T) {
 		})
 	}
 }
+
+
+func TestBuffsLogic (t *testing.T) {
+	gc := &game.GameContext{
+		Source: &game.Character{
+			Parameters: map[game.Field]int{
+				game.Health:  10,
+				game.Dodge: 10,
+			},
+			Buffs: []game.Effect{
+				{Field: game.Health, Duration: 2, Amount: 5},
+				{Field: game.Dodge, Duration: 3, Amount: 2},
+			},
+		},
+		Destination: &game.Character{
+			Parameters: map[game.Field]int{
+				game.Health: 10,
+			},
+		},
+	}
+
+	g := &game.Game{
+		State:       game.EnemyTurn,
+		GameContext: gc,
+	}
+
+	// Turn 1
+	StartPlayerTurn(gc, g)
+
+	// Turn 1 Verify that Buffs are applied
+	require.Equal(t, 15, gc.Source.Parameters[game.Health])
+	require.Equal(t, 12, gc.Source.Parameters[game.Dodge])
+
+	EndPlayerTurn(gc, g)
+
+	EnemyTurn(gc, g)
+
+	// Turn 2 Verify that Buffs are applied
+	StartPlayerTurn(gc, g)
+
+	require.Equal(t, 20, gc.Source.Parameters[game.Health])
+	// Dodge should be applied only once
+	require.Equal(t, 2, gc.Source.Buffs[0].Duration)
+	require.Equal(t, 12, gc.Source.Parameters[game.Dodge])
+
+	// check if the expired curses are removed
+	require.Len(t, gc.Source.Buffs, 1)
+}
