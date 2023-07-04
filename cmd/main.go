@@ -24,6 +24,7 @@ import (
 // - [X] DONE -- implement the logic when the player play a card or when an enemy do an action for missing attacks, critical hit...
 // - [X] DONE -- add the buff logic
 // - [X] DONE -- add the simple deck creation logic
+// - [X] DONE -- reorganize the code to have a models readonly package
 // - [ ] add the deck creation logic at the start of the game after the player has chosen their character
 // - [ ] add the object model 
 // - [ ] add the shop logic and implement croquinette economy
