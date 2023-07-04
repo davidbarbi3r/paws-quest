@@ -3,6 +3,7 @@ package game
 import (
 	// internal packages
 	"example/paws-quest/pkg/game/gamemap"
+	"example/paws-quest/pkg/models"
 
 	// external packages (standard library)
 	"net/http"
@@ -32,12 +33,12 @@ func (gs *GameServiceImpl) Create (ctx *gin.Context) {
 	newMap := gms.Create(496603)
 
 	// Create a new Game (next with the GameService)
-	game := Game{
+	game := models.Game{
 		ID:          423, 
 		Player:      playerId,
 		CurrentNode: newMap.Nodes[0], 
 		Map:         newMap, 
-		State:       CatSelection,
+		State:       models.CatSelection,
 		CatChosen:   nil, 
 		CatChoice:   []int{1, 2, 3},
 	}

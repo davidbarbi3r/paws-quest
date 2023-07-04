@@ -1,18 +1,19 @@
 package fight
 
 import (
-	game "example/paws-quest/pkg/game"
+	"example/paws-quest/pkg/models"
+	"example/paws-quest/pkg/card"
 )
 
-func hasEnoughStamina (c *game.Character, cost int) bool {
-	return c.Parameters[game.Stamina] >= cost
+func hasEnoughStamina (c *models.Character, cost int) bool {
+	return c.Parameters[models.Stamina] >= cost
 }
 
-func isCharacterDead (c *game.Character) bool {
-	return c.Parameters[game.Health] <= 0
+func isCharacterDead (c *models.Character) bool {
+	return c.Parameters[models.Health] <= 0
 }
 
-func applyCurses (c *game.Character) {
+func applyCurses (c *models.Character) {
 	if len(c.Curses) == 0 {
 		return
 	}
@@ -25,13 +26,13 @@ func applyCurses (c *game.Character) {
 	}
 }
 
-func applyBuffs (c *game.Character) {
+func applyBuffs (c *models.Character) {
 	if len(c.Buffs) == 0 {
 		return
 	}
 	for i := 0; i < len(c.Buffs); i++ {
 		if c.Buffs[i].Duration > 0 {
-			if c.Buffs[i].Field == game.Health {
+			if c.Buffs[i].Field == models.Health {
 				c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
 				c.Buffs[i].Duration--
 			} else {
@@ -41,14 +42,14 @@ func applyBuffs (c *game.Character) {
 	}
 }
 
-func applyDebuffs (c *game.Character) {
+func applyDebuffs (c *models.Character) {
 	if len(c.Buffs) == 0 {
 		return
 	}
 	for i := 0; i < len(c.Buffs); i++ {
 		
 		if c.Buffs[i].Duration > 0 {
-			if c.Buffs[i].Field == game.Health {
+			if c.Buffs[i].Field == models.Health {
 				continue 
 			} 
 				
@@ -58,7 +59,7 @@ func applyDebuffs (c *game.Character) {
 	}
 }
 
-func removeExpiredCursesAndBuffs (c *game.Character) {
+func removeExpiredCursesAndBuffs (c *models.Character) {
 	if len(c.Curses) != 0 {
 		for i := 0; i < len(c.Curses); i++ {
 			if c.Curses[i].Duration == 0 {
@@ -75,32 +76,32 @@ func removeExpiredCursesAndBuffs (c *game.Character) {
 	}
 }
 
-func StartPlayerTurn (gc *game.GameContext, g *game.Game) {
+func StartPlayerTurn (gc *models.GameContext, g *models.Game) {
 	applyCurses(gc.Source)
 	applyBuffs(gc.Source)
 	removeExpiredCursesAndBuffs(gc.Source)
 
 	if isCharacterDead(gc.Source) {
-		g.State = game.GameOver
+		g.State = models.GameOver
 		return
 	}
 
-	g.State = game.PlayerTurn
+	g.State = models.PlayerTurn
 }
 
-func PlayCard (gc *game.GameContext, g *game.Game, card game.Card) {
+func PlayCard (gc *models.GameContext, g *models.Game, card models.Card) {
 	if !hasEnoughStamina(gc.Source, card.Cost) {
 		return
 	}
 
-	gc.Source.Parameters[game.Stamina] -= card.Cost
+	gc.Source.Parameters[models.Stamina] -= card.Cost
 	
 	for _, action := range card.Actions {
 		action.Do(gc)
 	}
 
 	if isCharacterDead(gc.Source) {
-		g.State = game.GameOver
+		g.State = models.GameOver
 		return
 	}
 
@@ -111,52 +112,52 @@ func PlayCard (gc *game.GameContext, g *game.Game, card game.Card) {
 	} 
 }
 
-func EndPlayerTurn (gc *game.GameContext, g *game.Game) {
+func EndPlayerTurn (gc *models.GameContext, g *models.Game) {
 	// reset stamina // todo setup initial properties when needed
-	gc.Source.Parameters[game.Stamina] = gc.Source.Parameters[game.Speed]
+	gc.Source.Parameters[models.Stamina] = gc.Source.Parameters[models.Speed]
 	
 	// put unused cards in hand in discard pile
 	gc.Source.Discard = append(gc.Source.Discard, gc.Source.Hand...)
 	
 	// remove cards from hand
-	gc.Source.Hand = []game.Card{}
+	gc.Source.Hand = []models.Card{}
 	
 	// draw cards
 	// do I have enough cards in deck to draw? Yes
-	if len(gc.Source.Deck) > gc.Source.Parameters[game.HandSize] {
-		gc.Source.Hand = append(gc.Source.Hand, gc.Source.Deck[:gc.Source.Parameters[game.HandSize]]...)
+	if len(gc.Source.Deck) > gc.Source.Parameters[models.HandSize] {
+		gc.Source.Hand = append(gc.Source.Hand, gc.Source.Deck[:gc.Source.Parameters[models.HandSize]]...)
 		// remove drawn cards from deck
-		gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[game.HandSize]:]
+		gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[models.HandSize]:]
 	
 	// do I have enough cards in deck to draw? No
 	} else {
 		// put discard pile in deck
 		gc.Source.Deck = append(gc.Source.Deck, gc.Source.Discard...)
 		
-		gc.Source.Discard = []game.Card{}
+		gc.Source.Discard = []models.Card{}
 		
-		gc.Source.Deck = game.Shuffle(gc.Source.Deck)
+		gc.Source.Deck = card.Shuffle(gc.Source.Deck)
 		
 		// remove drawn cards from deck
-		gc.Source.Deck = []game.Card{}
+		gc.Source.Deck = []models.Card{}
 	}
-	gc.Source.Hand = append(gc.Source.Hand, gc.Source.Deck[:gc.Source.Parameters[game.HandSize]]...)
+	gc.Source.Hand = append(gc.Source.Hand, gc.Source.Deck[:gc.Source.Parameters[models.HandSize]]...)
 	// remove drawn cards from deck
-	gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[game.HandSize]:]
+	gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[models.HandSize]:]
 
 	applyDebuffs(gc.Destination)
 
 	// switch source and destination
 	gc.Source, gc.Destination = gc.Destination, gc.Source
-	g.State = game.EnemyTurn
+	g.State = models.EnemyTurn
 }
 
-func EnemyTurn (gc *game.GameContext, g *game.Game) {
+func EnemyTurn (gc *models.GameContext, g *models.Game) {
 	applyCurses(gc.Source)
 	removeExpiredCursesAndBuffs(gc.Source)
 
 	if isCharacterDead(gc.Source) {
-		g.State = game.Loot
+		g.State = models.Loot
 		return
 	}
 
@@ -171,14 +172,14 @@ func EnemyTurn (gc *game.GameContext, g *game.Game) {
 	}
 
 	if isCharacterDead(gc.Destination) {
-		g.State = game.GameOver
+		g.State = models.GameOver
 		return
 	}
 
 	applyDebuffs(gc.Destination)
 
 	gc.Source, gc.Destination = gc.Destination, gc.Source
-	g.State = game.PlayerTurn
+	g.State = models.PlayerTurn
 }
 
 

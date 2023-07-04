@@ -1,29 +1,13 @@
-package game
+package card
 
 import (
 	"math/rand"
 	"time"
+
+	"example/paws-quest/pkg/models"
 )
 
-type Card struct {
-	ID int 
-	Name string 
-	Description string 
-	Cost int
-	Rarity Rarity
-
-	Actions []IAction
-}
-
-type Rarity int
-
-const (
-	Common Rarity = iota
-	Uncommon
-	Rare
-)
-
-func Shuffle[T int | Card | string](items []T) []T {
+func Shuffle[T int | models.Card | string](items []T) []T {
 	// implement shuffle
 	randSeed := rand.NewSource(time.Now().UnixNano())
 	r := rand.New(randSeed)
@@ -31,10 +15,10 @@ func Shuffle[T int | Card | string](items []T) []T {
 	return items
 }
 
-func CreateStarterDeck () []Card {
+func CreateStarterDeck () []models.Card {
 	// goal 60% common, 30% uncommon, 10% rare
 
-	deck := []Card{
+	deck := []models.Card{
 		// 13 common cards
 		commonCards[0],
 		commonCards[0],

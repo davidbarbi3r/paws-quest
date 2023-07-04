@@ -1,6 +1,7 @@
 package gamemap
 
 import (
+	"example/paws-quest/pkg/models"
 	"fmt"
 	"testing"
 )
@@ -33,7 +34,7 @@ func TestCreateGameMap(t *testing.T) {
 		if i == nodeNumber - 1 {
 			connectedToBoss := false
 			for _, connection := range node.Connections {
-				if connection.Type == Boss {
+				if connection.Type == models.BossNode {
 					connectedToBoss = true
 				}
 			}
@@ -43,7 +44,7 @@ func TestCreateGameMap(t *testing.T) {
 		}
 
 		// Last node have to be of type Boss
-		if i == nodeNumber && node.Type != Boss {
+		if i == nodeNumber && node.Type != models.BossNode {
 			t.Errorf("The last Node is not of type Boss. Type: %s, Expected: Boss", node.Type)
 		}
 	}

@@ -2,29 +2,31 @@ package gamemap
 
 import (
 	"math/rand"
+
+	"example/paws-quest/pkg/models"
 )
 
 type GameMapServiceImpl struct {}
 
-func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
+func (gms *GameMapServiceImpl) Create (seed int64) models.GameMap {
 	NewRand := rand.New(rand.NewSource(seed))
 	nodeNumber := NewRand.Intn(5) + 5
 
-	nodes := make(map[int]Node)
+	nodes := make(map[int]models.Node)
 
 	for i := 0; i < nodeNumber; i++ {
-		node := Node{
+		node := models.Node{
 			ID: i,
-			Connections: make([]Node, 0),
+			Connections: make([]models.Node, 0),
 		}
 
 		typeRand := NewRand.Intn(10)
 		if typeRand >= 0 && typeRand <= 5 {
-			node.Type = Fight
+			node.Type = models.FightNode
 		} else if typeRand == 6 || typeRand == 7 {
-			node.Type = Shop
+			node.Type = models.ShopNode
 		} else {
-			node.Type = Rest
+			node.Type = models.RestNode
 		}
 
 		nodes[i] = node
@@ -41,9 +43,9 @@ func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
 				node.Connections = append(node.Connections, nodes[newConnection])
 			} 
 			if i == nodeNumber - 1 {
-				node.Connections = append(node.Connections, Node{
+				node.Connections = append(node.Connections, models.Node{
 					ID: nodeNumber,
-					Type: Boss,
+					Type: models.BossNode,
 					Connections: nil,
 				})
 			}
@@ -51,7 +53,7 @@ func (gms *GameMapServiceImpl) Create (seed int64) GameMap {
 		nodes[i] = node
 	}
 
-	return GameMap{
+	return models.GameMap{
 		Nodes: nodes,
 	}
 }
