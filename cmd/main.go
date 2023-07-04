@@ -15,8 +15,8 @@ import (
 	_ "github.com/lib/pq"
 
 	// internal packages
-	gamemap "example/paws-quest/pkg/game/gamemap"
-	player "example/paws-quest/pkg/player"
+	"example/paws-quest/pkg/game/gamemap"
+	"example/paws-quest/pkg/player"
 )
 
 // todo
