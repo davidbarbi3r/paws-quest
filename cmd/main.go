@@ -5,18 +5,15 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-
 	// db
 	dbService "example/paws-quest/pkg/database"
 	"example/paws-quest/pkg/game"
-
-	_ "github.com/lib/pq"
-
 	// internal packages
 	"example/paws-quest/pkg/game/gamemap"
 	"example/paws-quest/pkg/player"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
 // todo

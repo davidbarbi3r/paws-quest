@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+
 	_ "github.com/lib/pq"
 )
 
@@ -16,7 +17,6 @@ func NewPostgreSQLService(connectionString string) *PostgreSQLService {
 }
 
 func (service *PostgreSQLService) Connect() (*sql.DB, error) {
-
 	db, err := sql.Open("postgres", service.connectionString)
 	if err != nil {
 		return nil, err

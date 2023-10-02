@@ -18,7 +18,6 @@ func applyCurses(c *models.Character) {
 		return
 	}
 	for i := 0; i < len(c.Curses); i++ {
-
 		if c.Curses[i].Duration > 0 {
 			c.Parameters[c.Curses[i].Field] -= c.Curses[i].Amount
 			c.Curses[i].Duration--
@@ -47,7 +46,6 @@ func applyDebuffs(c *models.Character) {
 		return
 	}
 	for i := 0; i < len(c.Buffs); i++ {
-
 		if c.Buffs[i].Duration > 0 {
 			if c.Buffs[i].Field == models.Health {
 				continue

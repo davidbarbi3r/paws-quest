@@ -1,10 +1,10 @@
 package fight
 
 import (
-	"example/paws-quest/pkg/action"
-	"example/paws-quest/pkg/models"
 	"testing"
 
+	"example/paws-quest/pkg/action"
+	"example/paws-quest/pkg/models"
 	"github.com/stretchr/testify/require"
 )
 
@@ -110,8 +110,8 @@ func TestPlayCard_ApplyCardAction(t *testing.T) {
 	gc.Destination.Parameters[models.Health] = 10
 
 	card := models.Card{
-		Cost:   5,
-		Actions: []models.IAction {
+		Cost: 5,
+		Actions: []models.IAction{
 			action.Attack{Duration: 1, Amount: 5},
 		},
 	}
@@ -133,8 +133,8 @@ func TestPlayCard_RemoveCardFromHand(t *testing.T) {
 				models.Stamina: 10,
 			},
 			Hand: []models.Card{
-				{ID: 1, Actions: []models.IAction {action.Attack{Duration: 1, Amount: 5}}},
-				{ID: 2, Actions: []models.IAction {action.Attack{Duration: 2, Amount: 5}}, Cost: 5},
+				{ID: 1, Actions: []models.IAction{action.Attack{Duration: 1, Amount: 5}}},
+				{ID: 2, Actions: []models.IAction{action.Attack{Duration: 2, Amount: 5}}, Cost: 5},
 			},
 		},
 		Destination: &models.Character{
@@ -174,13 +174,12 @@ func TestEndPlayerTurn(t *testing.T) {
 	}
 }
 
-
-func TestBuffsLogic (t *testing.T) {
+func TestBuffsLogic(t *testing.T) {
 	gc := &models.GameContext{
 		Source: &models.Character{
 			Parameters: map[models.Field]int{
-				models.Health:  10,
-				models.Dodge: 10,
+				models.Health: 10,
+				models.Dodge:  10,
 			},
 			Buffs: []models.Effect{
 				{Field: models.Health, Duration: 2, Amount: 5},

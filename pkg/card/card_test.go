@@ -4,9 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"example/paws-quest/pkg/models"
+	"github.com/stretchr/testify/require"
 )
 
 func TestShuffleCards(t *testing.T) {
@@ -57,11 +56,5 @@ func TestShuffleCards(t *testing.T) {
 
 	// check if cardsList are shuffled
 	require.False(t, reflect.DeepEqual(cardsList, originalCards))
-	require.False(t, (
-		cardsList[0].ID == originalCards[0].ID) && (
-		cardsList[1].ID == originalCards[1].ID) && (
-		cardsList[2].ID == originalCards[2].ID) && (
-		cardsList[3].ID == originalCards[3].ID) && (
-		cardsList[4].ID == originalCards[4].ID))
+	require.False(t, (cardsList[0].ID == originalCards[0].ID) && (cardsList[1].ID == originalCards[1].ID) && (cardsList[2].ID == originalCards[2].ID) && (cardsList[3].ID == originalCards[3].ID) && (cardsList[4].ID == originalCards[4].ID))
 }
-

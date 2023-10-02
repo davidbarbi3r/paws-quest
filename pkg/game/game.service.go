@@ -1,13 +1,11 @@
 package game
 
 import (
+	"net/http"
+
 	// internal packages
 	"example/paws-quest/pkg/game/gamemap"
 	"example/paws-quest/pkg/models"
-
-	// external packages (standard library)
-	"net/http"
-
 	// external packages (third party)
 	"github.com/gin-gonic/gin"
 )

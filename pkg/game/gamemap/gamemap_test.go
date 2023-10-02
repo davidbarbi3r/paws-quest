@@ -1,9 +1,10 @@
 package gamemap
 
 import (
-	"example/paws-quest/pkg/models"
 	"fmt"
 	"testing"
+
+	"example/paws-quest/pkg/models"
 )
 
 func TestCreateGameMap(t *testing.T) {
