@@ -6,16 +6,16 @@ import (
 )
 
 type PostgreSQLService struct {
-    connectionString string
+	connectionString string
 }
 
-func NewPostgreSQLService (connectionString string) *PostgreSQLService {
+func NewPostgreSQLService(connectionString string) *PostgreSQLService {
 	return &PostgreSQLService{
 		connectionString,
 	}
 }
 
-func (service *PostgreSQLService) Connect () (*sql.DB, error) {
+func (service *PostgreSQLService) Connect() (*sql.DB, error) {
 
 	db, err := sql.Open("postgres", service.connectionString)
 	if err != nil {
@@ -24,7 +24,7 @@ func (service *PostgreSQLService) Connect () (*sql.DB, error) {
 
 	err = db.Ping()
 	if err != nil {
-		return nil, err;
+		return nil, err
 	}
 
 	return db, nil
