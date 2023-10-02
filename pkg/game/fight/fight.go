@@ -162,12 +162,12 @@ func EnemyTurn(gc *models.GameContext, g *models.Game) {
 	}
 
 	if len(gc.Source.CardsPatern) != 0 {
-		card := gc.Source.Hand[gc.Source.CardsPatern[0]]
+		currentCard := gc.Source.Hand[gc.Source.CardsPatern[0]]
 
-		for _, action := range card.Actions {
+		for _, action := range currentCard.Actions {
 			action.Do(gc)
 		}
-		// put card played at the end of the pattern
+		// put currentCard played at the end of the pattern
 		gc.Destination.CardsPatern = append(gc.Destination.CardsPatern[1:], gc.Destination.CardsPatern[0])
 	}
 
