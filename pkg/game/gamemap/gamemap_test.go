@@ -9,7 +9,7 @@ import (
 func TestCreateGameMap(t *testing.T) {
 	seed := int64(45582)
 
-	gms := &GameMapServiceImpl{}
+	gms := &ServiceImpl{}
 
 	gameMap := gms.Create(seed)
 
@@ -31,7 +31,7 @@ func TestCreateGameMap(t *testing.T) {
 		}
 
 		// Last nodes have to be connected to the boss node
-		if i == nodeNumber - 1 {
+		if i == nodeNumber-1 {
 			connectedToBoss := false
 			for _, connection := range node.Connections {
 				if connection.Type == models.BossNode {

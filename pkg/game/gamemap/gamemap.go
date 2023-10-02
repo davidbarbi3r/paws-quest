@@ -6,9 +6,9 @@ import (
 	"example/paws-quest/pkg/models"
 )
 
-type GameMapServiceImpl struct {}
+type ServiceImpl struct{}
 
-func (gms *GameMapServiceImpl) Create (seed int64) models.GameMap {
+func (gms *ServiceImpl) Create(seed int64) models.GameMap {
 	NewRand := rand.New(rand.NewSource(seed))
 	nodeNumber := NewRand.Intn(5) + 5
 
@@ -16,7 +16,7 @@ func (gms *GameMapServiceImpl) Create (seed int64) models.GameMap {
 
 	for i := 0; i < nodeNumber; i++ {
 		node := models.Node{
-			ID: i,
+			ID:          i,
 			Connections: make([]models.Node, 0),
 		}
 
@@ -41,11 +41,11 @@ func (gms *GameMapServiceImpl) Create (seed int64) models.GameMap {
 
 			if len(node.Connections) == 0 || (nodes[newConnection].ID > node.ID && node.Connections[0].ID != newConnection) {
 				node.Connections = append(node.Connections, nodes[newConnection])
-			} 
-			if i == nodeNumber - 1 {
+			}
+			if i == nodeNumber-1 {
 				node.Connections = append(node.Connections, models.Node{
-					ID: nodeNumber,
-					Type: models.BossNode,
+					ID:          nodeNumber,
+					Type:        models.BossNode,
 					Connections: nil,
 				})
 			}
@@ -57,5 +57,3 @@ func (gms *GameMapServiceImpl) Create (seed int64) models.GameMap {
 		Nodes: nodes,
 	}
 }
-
-

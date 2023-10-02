@@ -12,11 +12,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GameServiceImpl struct {}
+type ServiceImpl struct{}
 
-func (gs *GameServiceImpl) Create (ctx *gin.Context) {
+func (gs *ServiceImpl) Create(ctx *gin.Context) {
 	playerId := ctx.GetInt("playerId")
-	
+
 	// Get the player from the database using the PlayerService
 	// TODO: Implement PlayerService
 	// ps := player.PlayerServiceImpl{}
@@ -29,17 +29,17 @@ func (gs *GameServiceImpl) Create (ctx *gin.Context) {
 	// }
 
 	// Generate a new GameMap using the GameMapService
-	gms := gamemap.GameMapServiceImpl{}
+	gms := gamemap.ServiceImpl{}
 	newMap := gms.Create(496603)
 
 	// Create a new Game (next with the GameService)
 	game := models.Game{
-		ID:          423, 
+		ID:          423,
 		Player:      playerId,
-		CurrentNode: newMap.Nodes[0], 
-		Map:         newMap, 
+		CurrentNode: newMap.Nodes[0],
+		Map:         newMap,
 		State:       models.CatSelection,
-		CatChosen:   nil, 
+		CatChosen:   nil,
 		CatChoice:   []int{1, 2, 3},
 	}
 
