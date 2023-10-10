@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupGameRouter (router *gin.RouterGroup) {
-	gameService := GameServiceImpl{}
+func SetupGameRouter(router *gin.RouterGroup) {
+	gameService := ServiceImpl{}
 	router.POST("/create", gameService.Create)
 }

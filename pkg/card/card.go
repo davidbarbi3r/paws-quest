@@ -15,7 +15,7 @@ func Shuffle[T int | models.Card | string](items []T) []T {
 	return items
 }
 
-func CreateStarterDeck () []models.Card {
+func CreateStarterDeck() []models.Card {
 	// goal 60% common, 30% uncommon, 10% rare
 
 	deck := []models.Card{

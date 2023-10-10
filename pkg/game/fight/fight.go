@@ -1,24 +1,23 @@
 package fight
 
 import (
-	"example/paws-quest/pkg/models"
 	"example/paws-quest/pkg/card"
+	"example/paws-quest/pkg/models"
 )
 
-func hasEnoughStamina (c *models.Character, cost int) bool {
+func hasEnoughStamina(c *models.Character, cost int) bool {
 	return c.Parameters[models.Stamina] >= cost
 }
 
-func isCharacterDead (c *models.Character) bool {
+func isCharacterDead(c *models.Character) bool {
 	return c.Parameters[models.Health] <= 0
 }
 
-func applyCurses (c *models.Character) {
+func applyCurses(c *models.Character) {
 	if len(c.Curses) == 0 {
 		return
 	}
 	for i := 0; i < len(c.Curses); i++ {
-
 		if c.Curses[i].Duration > 0 {
 			c.Parameters[c.Curses[i].Field] -= c.Curses[i].Amount
 			c.Curses[i].Duration--
@@ -26,7 +25,7 @@ func applyCurses (c *models.Character) {
 	}
 }
 
-func applyBuffs (c *models.Character) {
+func applyBuffs(c *models.Character) {
 	if len(c.Buffs) == 0 {
 		return
 	}
@@ -37,29 +36,28 @@ func applyBuffs (c *models.Character) {
 				c.Buffs[i].Duration--
 			} else {
 				c.Parameters[c.Buffs[i].Field] += c.Buffs[i].Amount
-			}		
+			}
 		}
 	}
 }
 
-func applyDebuffs (c *models.Character) {
+func applyDebuffs(c *models.Character) {
 	if len(c.Buffs) == 0 {
 		return
 	}
 	for i := 0; i < len(c.Buffs); i++ {
-		
 		if c.Buffs[i].Duration > 0 {
 			if c.Buffs[i].Field == models.Health {
-				continue 
-			} 
-				
+				continue
+			}
+
 			c.Parameters[c.Buffs[i].Field] -= c.Buffs[i].Amount
 			c.Buffs[i].Duration--
 		}
 	}
 }
 
-func removeExpiredCursesAndBuffs (c *models.Character) {
+func removeExpiredCursesAndBuffs(c *models.Character) {
 	if len(c.Curses) != 0 {
 		for i := 0; i < len(c.Curses); i++ {
 			if c.Curses[i].Duration == 0 {
@@ -76,7 +74,7 @@ func removeExpiredCursesAndBuffs (c *models.Character) {
 	}
 }
 
-func StartPlayerTurn (gc *models.GameContext, g *models.Game) {
+func StartPlayerTurn(gc *models.GameContext, g *models.Game) {
 	applyCurses(gc.Source)
 	applyBuffs(gc.Source)
 	removeExpiredCursesAndBuffs(gc.Source)
@@ -89,13 +87,13 @@ func StartPlayerTurn (gc *models.GameContext, g *models.Game) {
 	g.State = models.PlayerTurn
 }
 
-func PlayCard (gc *models.GameContext, g *models.Game, card models.Card) {
+func PlayCard(gc *models.GameContext, g *models.Game, card models.Card) {
 	if !hasEnoughStamina(gc.Source, card.Cost) {
 		return
 	}
 
 	gc.Source.Parameters[models.Stamina] -= card.Cost
-	
+
 	for _, action := range card.Actions {
 		action.Do(gc)
 	}
@@ -109,35 +107,35 @@ func PlayCard (gc *models.GameContext, g *models.Game, card models.Card) {
 		if gc.Source.Hand[i].ID == card.ID {
 			gc.Source.Hand = append(gc.Source.Hand[:i], gc.Source.Hand[i+1:]...)
 		}
-	} 
+	}
 }
 
-func EndPlayerTurn (gc *models.GameContext, g *models.Game) {
+func EndPlayerTurn(gc *models.GameContext, g *models.Game) {
 	// reset stamina // todo setup initial properties when needed
 	gc.Source.Parameters[models.Stamina] = gc.Source.Parameters[models.Speed]
-	
+
 	// put unused cards in hand in discard pile
 	gc.Source.Discard = append(gc.Source.Discard, gc.Source.Hand...)
-	
+
 	// remove cards from hand
 	gc.Source.Hand = []models.Card{}
-	
+
 	// draw cards
 	// do I have enough cards in deck to draw? Yes
 	if len(gc.Source.Deck) > gc.Source.Parameters[models.HandSize] {
 		gc.Source.Hand = append(gc.Source.Hand, gc.Source.Deck[:gc.Source.Parameters[models.HandSize]]...)
 		// remove drawn cards from deck
 		gc.Source.Deck = gc.Source.Deck[gc.Source.Parameters[models.HandSize]:]
-	
-	// do I have enough cards in deck to draw? No
+
+		// do I have enough cards in deck to draw? No
 	} else {
 		// put discard pile in deck
 		gc.Source.Deck = append(gc.Source.Deck, gc.Source.Discard...)
-		
+
 		gc.Source.Discard = []models.Card{}
-		
+
 		gc.Source.Deck = card.Shuffle(gc.Source.Deck)
-		
+
 		// remove drawn cards from deck
 		gc.Source.Deck = []models.Card{}
 	}
@@ -152,7 +150,7 @@ func EndPlayerTurn (gc *models.GameContext, g *models.Game) {
 	g.State = models.EnemyTurn
 }
 
-func EnemyTurn (gc *models.GameContext, g *models.Game) {
+func EnemyTurn(gc *models.GameContext, g *models.Game) {
 	applyCurses(gc.Source)
 	removeExpiredCursesAndBuffs(gc.Source)
 
@@ -162,12 +160,12 @@ func EnemyTurn (gc *models.GameContext, g *models.Game) {
 	}
 
 	if len(gc.Source.CardsPatern) != 0 {
-		card := gc.Source.Hand[gc.Source.CardsPatern[0]]
-	
-		for _, action := range card.Actions {
+		currentCard := gc.Source.Hand[gc.Source.CardsPatern[0]]
+
+		for _, action := range currentCard.Actions {
 			action.Do(gc)
 		}
-		// put card played at the end of the pattern
+		// put currentCard played at the end of the pattern
 		gc.Destination.CardsPatern = append(gc.Destination.CardsPatern[1:], gc.Destination.CardsPatern[0])
 	}
 
@@ -181,5 +179,3 @@ func EnemyTurn (gc *models.GameContext, g *models.Game) {
 	gc.Source, gc.Destination = gc.Destination, gc.Source
 	g.State = models.PlayerTurn
 }
-
-

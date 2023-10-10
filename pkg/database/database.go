@@ -4,6 +4,6 @@ import (
 	"database/sql"
 )
 
-type DatabaseService interface {
+type Service interface {
 	Connect() (*sql.DB, error)
 }

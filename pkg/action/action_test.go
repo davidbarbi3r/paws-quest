@@ -3,9 +3,8 @@ package action
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
 	"example/paws-quest/pkg/models"
+	"github.com/stretchr/testify/require"
 )
 
 func TestAttackAction(t *testing.T) {
@@ -74,7 +73,7 @@ func TestCrititalAttack(t *testing.T) {
 		Source: &models.Character{
 			Parameters: map[models.Field]int{
 				models.Health:         10,
-				models.Critical: 		100,
+				models.Critical:       100,
 				models.CriticalDamage: 50,
 			},
 		},
